@@ -1,16 +1,47 @@
-import $ from 'jquery';
 import './style.scss';
-import React from 'react';
 import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+import debounce from 'lodash.debounce';
+import SearchBar from './components/search_bar';
+import youtubeSearch from './youtube-api';
+import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 
-const App = () => <div className="test">All the REACT are belong to us!</div>;
-ReactDOM.render(<App />, document.getElementById('main'));
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.search = debounce(this.search, 300);
+    this.search('pixar');
+    this.state = {
+      videos: [],
+      selectedVideo: null,
+    }; // nothing here yet
+    youtubeSearch('pixar').then((videos) => {
+      this.setState({
+        videos,
+        selectedVideo: videos[0],
+      });
+    });
+  }
 
-let seconds = 0;
+  search = (text) => {
+    youtubeSearch(text).then((videos) => {
+      this.setState({
+        videos,
+        selectedVideo: videos[0],
+      });
+    });
+  }
 
-function time() {
-  seconds += 1;
-  $('#main').html(`${seconds} seconds have passed.`);
+  render() {
+    return (
+      <div>
+        <SearchBar onSearchChange={this.search} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList onVideoSelect={selectedVideo => this.setState({ selectedVideo })} videos={this.state.videos} />
+      </div>
+    );
+  }
 }
 
-setInterval(time, 1000);
+ReactDOM.render(<App />, document.getElementById('main'));
