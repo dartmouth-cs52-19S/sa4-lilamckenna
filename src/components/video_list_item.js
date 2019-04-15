@@ -8,7 +8,6 @@ const VideoListItem = (props) => {
       <img src={imgUrl} alt="video" />
       <div>{props.video.snippet.title}</div>
     </li>
-
   );
 };
 
