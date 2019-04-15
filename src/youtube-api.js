@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://www.googleapis.com/youtube/v3/search';
-const API_KEY = 'AIzaSyA0ujc_oyGsRy8jOhQRRu5U54UVWjLD64g';
+const API_KEY = 'AIzaSyDq2bJB6sHG458vLdKil4v-REGboPy4A-I';
 
 const youtubeSearch = (term) => {
   const params = {
@@ -17,7 +17,7 @@ const youtubeSearch = (term) => {
         resolve(response.data.items);
       })
       .catch((error) => {
-        console.log(`youtube api error: ${error}`);
+        console.log(`youtube api error: ${error.message}`);
         reject(error);
       });
   });
